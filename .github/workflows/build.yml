@@ -32,7 +32,7 @@ jobs:
 
       # build the docs
       - name: build
-        run: sphinx-build -M html ./source /tmp/build/
+        run: sphinx-build -M html ./source ./_build/
 
       # initialise repo
       - name: initialise repo
@@ -43,6 +43,7 @@ jobs:
           git config user.email "action@github.com"
           git config user.name "Github Action"
           git commit -m "deploy"
+          git config --global --add safe.directory /github/workspace/_build
 
       - name: force push buid files to deploy branch
         uses: ad-m/github-push-action@v0.5.0
@@ -50,4 +51,4 @@ jobs:
           github_token: ${{ secrets.TOKEN }}
           branch: deploy
           force: true
-          directory: /tmp/build/
+          directory: _build
