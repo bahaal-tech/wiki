@@ -32,12 +32,12 @@ jobs:
 
       # build the docs
       - name: build
-        run: sphinx-build -M html ./source ./_build/
+        run: sphinx-build -M html ./source /tmp/build/
 
       # initialise repo
       - name: initialise repo
         run: |
-          cd _build
+          cd /tmp/build/
           git init
           git add -A
           git config user.email "action@github.com"
@@ -50,4 +50,4 @@ jobs:
           github_token: ${{ secrets.TOKEN }}
           branch: deploy
           force: true
-          directory: _build
+          directory: /tmp/build/
