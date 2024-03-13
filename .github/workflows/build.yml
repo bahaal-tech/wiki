@@ -32,18 +32,17 @@ jobs:
 
       # build the docs
       - name: build
-        run: sphinx-build -M html ./source ./_build/
+        run: sphinx-build -M html ./source ${{ runner.temp }}/build/
 
       # initialise repo
       - name: initialise repo
         run: |
-          cd _build/
+          cd ${{ runner.temp }}/build/
           git init
           git add -A
           git config user.email "action@github.com"
           git config user.name "Github Action"
           git commit -m "deploy"
-          git config --global --add safe.directory '*'
 
       - name: force push buid files to deploy branch
         uses: ad-m/github-push-action@v0.5.0
@@ -51,4 +50,4 @@ jobs:
           github_token: ${{ secrets.TOKEN }}
           branch: deploy
           force: true
-          directory: _build
+          directory: ${{ runner.temp }}/build
