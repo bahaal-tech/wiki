@@ -25,6 +25,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v3
+      - uses: ad-m/github-push-action@v0.5.0
 
       # install dependencies
       - name: install dependencies
@@ -34,13 +35,19 @@ jobs:
       - name: build
         run: sphinx-build -M html ./source ./_build/
 
-      # deploy
-      - name: deploy to gh pages
-        uses: peaceiris/actions-gh-pages@v3
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+      # initialise repo
+      - name: initialise repo
+        run: |
+          cd _build
+          git init
+          git add -A
+          git config user.email "action@github.com"
+          git config user.name "Github Action"
+          git commit -m "deploy"
+
+      - name: force push buid files to deploy branch
         with:
-          publish_branch: gh-pages
           github_token: ${{ secrets.TOKEN }}
-          publish_dir: _build/
-          force_orphan: true
-          
+          branch: deploy
+          force: true
+          directory: _build
