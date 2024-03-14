@@ -32,22 +32,14 @@ jobs:
 
       # build the docs
       - name: build
-        run: sphinx-build -M html ./source ${{ runner.temp }}/build/
+        run: sphinx-build -M html ./source ./_build/
 
-      # initialise repo
-      - name: initialise repo
-        run: |
-          cd ${{ runner.temp }}/build/
-          git init
-          git add -A
-          git config user.email "action@github.com"
-          git config user.name "Github Action"
-          git commit -m "deploy"
-
-      - name: force push buid files to deploy branch
-        uses: ad-m/github-push-action@v0.5.0
+      # deploy
+      - name: deploy to gh pages
+        uses: peaceiris/actions-gh-pages@v3
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         with:
+          publish_branch: gh-pages
           github_token: ${{ secrets.TOKEN }}
-          branch: deploy
-          force: true
-          directory: ${{ runner.temp }}/build
+          publish_dir: _build/html/
+          force_orphan: true
