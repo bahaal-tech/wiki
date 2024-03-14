@@ -7,13 +7,12 @@ Welcome to Caimera's Wiki!
 ================================
 
 .. toctree::
-   company-structure
-
-.. toctree::
-   communication
-
-.. toctree::
-   important-calls
+   :maxdepth: 2
+   :caption: Work
+   
+   work/company-structure
+   work/communication
+   work/important-calls
 
 .. toctree::
    :maxdepth: 2
